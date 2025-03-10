@@ -1,0 +1,5 @@
+plugin: soap
+wsdlFile: service.wsdl
+
+# don't wrap request/response in a SOAP envelope
+envelope: false

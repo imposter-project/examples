@@ -1,0 +1,12 @@
+plugin: rest
+
+resources:
+- method: PUT
+  path: /store
+  response:
+    scriptFile: store.js
+
+- method: GET
+  path: /load
+  response:
+    scriptFile: store.js
