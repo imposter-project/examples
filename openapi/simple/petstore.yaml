@@ -32,6 +32,29 @@ paths:
                   "name": "Dog"
                 }
               ]
+  /pets/{petId}:
+    get:
+      description: "Returns a pet by ID"
+      parameters:
+        - name: "petId"
+          in: "path"
+          required: true
+          description: "The ID of the pet to retrieve"
+          type: "integer"
+          format: "int64"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "A pet by ID"
+          schema:
+            $ref: "#/definitions/Pet"
+          examples:
+            application/json: |-
+              {
+                "id": 101,
+                "name": "Cat"
+              }
 definitions:
   Pet:
     type: "object"
