@@ -1,0 +1,139 @@
+openapi: "3.0.0"
+info:
+  title: XML Examples API
+  version: v1
+paths:
+  /xml/pets:
+    get:
+      operationId: listPetsXml
+      summary: List pets as XML (schema-generated)
+      responses:
+        '200':
+          description: pet response
+          content:
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  id:
+                    type: integer
+                  breed:
+                    type: string
+                    example: Collie
+  /xml/pets/list:
+    get:
+      operationId: listPetsArrayXml
+      summary: List pets as XML array (schema-generated)
+      responses:
+        '200':
+          description: pet list response
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    id:
+                      type: integer
+  /xml/pets/inline:
+    get:
+      operationId: getPetInlineXml
+      summary: Get pet with inline XML example
+      responses:
+        '200':
+          description: pet response
+          content:
+            application/xml:
+              example:
+                name: Buddy
+                id: 1
+                breed: Labrador
+  /xml/pets/both:
+    get:
+      operationId: getPetBothFormats
+      summary: Get pet in JSON or XML
+      responses:
+        '200':
+          description: pet response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  id:
+                    type: integer
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  id:
+                    type: integer
+  /xml/pets/named:
+    get:
+      operationId: getPetNamedXml
+      summary: Get pet with custom XML root element name from schema
+      responses:
+        '200':
+          description: pet response
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: Pet
+                properties:
+                  name:
+                    type: string
+                  id:
+                    type: integer
+                  breed:
+                    type: string
+                    example: Collie
+  /xml/pets/named-list:
+    get:
+      operationId: listPetsNamedXml
+      summary: List pets with custom XML element names from schema
+      responses:
+        '200':
+          description: pet list response
+          content:
+            application/xml:
+              schema:
+                type: array
+                xml:
+                  name: Pets
+                items:
+                  type: object
+                  xml:
+                    name: Pet
+                  properties:
+                    name:
+                      type: string
+                    id:
+                      type: integer
+  /xml/pets/named-inline:
+    get:
+      operationId: getPetNamedInlineXml
+      summary: Get pet with inline example and custom XML root name
+      responses:
+        '200':
+          description: pet response
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: Animal
+              example:
+                name: Buddy
+                id: 1
+                breed: Labrador
