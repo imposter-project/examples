@@ -1,0 +1,53 @@
+name: JUnit Sample
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      checks: write
+    steps:
+      - name: Checkout examples
+        uses: actions/checkout@v6
+
+      - name: Checkout imposter-jvm-engine
+        uses: actions/checkout@v6
+        with:
+          repository: 'imposter-project/imposter-jvm-engine'
+          path: 'imposter-jvm-engine'
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          java-version: 11
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Set up build environment
+        run: |
+          # Disable gradle daemon
+          mkdir -p ~/.gradle
+          echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
+
+      - name: Publish imposter to local Maven repository
+        id: publish-maven-local
+        working-directory: ./imposter-jvm-engine
+        run: |
+          ./gradlew publishToMavenLocal --stacktrace -xtest
+          echo "PUBLISHED_VERSION=$( cat gradle.properties | grep projectVersion= | cut -c16- )" >> $GITHUB_OUTPUT
+
+      - name: Test JUnit example project
+        working-directory: ./junit-sample
+        run: ./mvnw test -Dimposter.version=${{ steps.publish-maven-local.outputs.PUBLISHED_VERSION }}
+
+      - name: Publish unit test results
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: "**/surefire-reports/**/*.xml"
+          comment_mode: off
