@@ -1,0 +1,16 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "agentId": "main",
+    "path": "/home/mock/workspace",
+    "parentPath": "/home/mock",
+    "entries": [
+      { "path": "/home/mock/workspace/README.md", "name": "README.md", "kind": "file", "size": 64, "updatedAtMs": ${datetime.now.millis} },
+      { "path": "/home/mock/workspace/src", "name": "src", "kind": "directory", "updatedAtMs": ${datetime.now.millis} }
+    ],
+    "totalEntries": 2,
+    "offset": 0
+  }
+}

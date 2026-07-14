@@ -1,0 +1,24 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "task": {
+      "id": "task-1",
+      "kind": "agentTurn",
+      "runtime": "agent",
+      "status": "completed",
+      "title": "Summarise the README",
+      "agentId": "main",
+      "sessionKey": "main",
+      "runId": "run-1",
+      "createdAt": ${datetime.now.millis},
+      "updatedAt": ${datetime.now.millis},
+      "startedAt": ${datetime.now.millis},
+      "endedAt": ${datetime.now.millis},
+      "toolUseCount": 2,
+      "lastToolName": "read_file",
+      "terminalSummary": "Summarised the project README."
+    }
+  }
+}

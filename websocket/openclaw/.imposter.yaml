@@ -1,1 +1,3 @@
+# The OpenClaw mock is split across several '*-config.yaml' files (one per
+# protocol domain); Imposter loads and merges them all. See README.md.
 engine: native

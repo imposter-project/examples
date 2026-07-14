@@ -1,0 +1,9 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "events": [],
+    "nextCursor": null
+  }
+}

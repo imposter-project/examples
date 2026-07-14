@@ -1,0 +1,101 @@
+# OpenClaw Gateway WebSocket mock - commands, tools and skills.
+plugin: websocket
+
+resources:
+  # commands.list: the command inventory (native + skill commands).
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: commands.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: commands-list.json
+      template: true
+
+  # tools.catalog: all runtime tools grouped by source.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: tools.catalog
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: tools-catalog.json
+      template: true
+
+  # tools.effective: tools effective for the 'main' session.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: tools.effective
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: tools-effective.json
+      template: true
+
+  # tools.invoke: run a tool directly (returns an SDK-style envelope).
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: tools.invoke
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"ok":true,"toolName":"read_file","output":{"bytes":40},"source":"core"}}'
+      template: true
+
+  # skills.status: installed skills for the main agent.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: skills.status
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: skills-status.json
+      template: true
+
+  # skills.search: ClawHub skill discovery.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: skills.search
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: skills-search.json
+      template: true
+
+  # skills.detail: detail for one skill.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: skills.detail
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: skills-detail.json
+      template: true

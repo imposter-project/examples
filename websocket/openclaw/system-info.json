@@ -1,0 +1,27 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "machineName": "mock-gateway",
+    "hostname": "mock-gateway.local",
+    "platform": "darwin",
+    "release": "25.5.0",
+    "arch": "arm64",
+    "osLabel": "macOS 15.5",
+    "lanAddress": "192.168.1.42",
+    "port": 8080,
+    "nodeVersion": "mock",
+    "pid": 1234,
+    "processInstanceId": "proc-mock-1",
+    "uptimeMs": 3600000,
+    "cpuCount": 8,
+    "cpuModel": "Apple M3",
+    "loadAverage": [1.2, 1.1, 0.9],
+    "memoryTotalBytes": 34359738368,
+    "memoryFreeBytes": 8589934592,
+    "diskTotalBytes": 1099511627776,
+    "diskAvailableBytes": 549755813888,
+    "diskPath": "/"
+  }
+}

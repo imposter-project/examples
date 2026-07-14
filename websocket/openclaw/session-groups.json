@@ -1,0 +1,11 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "groups": [
+      { "name": "Active", "position": 0 },
+      { "name": "Archived", "position": 1 }
+    ]
+  }
+}

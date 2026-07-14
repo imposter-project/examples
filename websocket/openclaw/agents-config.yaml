@@ -1,0 +1,154 @@
+# OpenClaw Gateway WebSocket mock - agents domain.
+# A single 'main' agent, its identity, bootstrap files and workspace.
+plugin: websocket
+
+resources:
+  # agents.list: a single agent, 'main', which is also the default.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: agents.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"defaultId":"main","mainKey":"main","scope":"global","agents":[{"id":"main","name":"main"}]}}'
+      template: true
+
+  # agent.identity.get: the effective identity for the main agent.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: agent.identity.get
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: agent-identity.json
+      template: true
+
+  # agents.files.list / get: bootstrap files for the main agent.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: agents.files.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: agents-files-list.json
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: agents.files.get
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: agents-file-get.json
+      template: true
+
+  # agents.workspace.list / get: browse the main agent's workspace.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: agents.workspace.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: agents-workspace-list.json
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: agents.workspace.get
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: agents-workspace-get.json
+      template: true
+
+  # agent.wait: terminal snapshot for a run.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: agent.wait
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"runId":"run-1","status":"completed","stopReason":"end_turn"}}'
+      template: true
+
+  # agents.create / update / delete: mutations, acknowledged with a result.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: agents.create
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"ok":true,"agentId":"main","name":"Main","workspace":"/home/mock/.openclaw/agents/main","model":"claude-opus-4-8"}}'
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: agents.update
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"ok":true,"agentId":"main"}}'
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: agents.delete
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"ok":true,"agentId":"main","removedBindings":0}}'
+      template: true
+
+  # agents.files.set: write a bootstrap file, acknowledged with the file result.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: agents.files.set
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"ok":true,"agentId":"main","workspace":"/home/mock/.openclaw/agents/main","file":{"name":"AGENT.md","path":"/home/mock/.openclaw/agents/main/AGENT.md","missing":false,"size":128,"updatedAtMs":${datetime.now.millis}}}}'
+      template: true

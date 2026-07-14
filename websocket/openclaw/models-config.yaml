@@ -1,0 +1,32 @@
+# OpenClaw Gateway WebSocket mock - models domain.
+plugin: websocket
+
+resources:
+  # models.list: the models the session can switch between. The 'main' session's
+  # current model (see sessions.list) is one of these, so the picker highlights it.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: models.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: models.json
+      template: true
+
+  # models.probe: check provider reachability.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: models.probe
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"provider":"anthropic","status":"ok","latencyMs":120,"results":[{"profileId":"default","label":"Default","status":"ok","latencyMs":120}]}}'
+      template: true

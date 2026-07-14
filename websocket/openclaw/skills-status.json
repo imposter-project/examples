@@ -1,0 +1,11 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "skills": [
+      { "slug": "web-search", "displayName": "Web Search", "enabled": true, "version": "1.2.0", "source": "clawhub" },
+      { "slug": "github-tools", "displayName": "GitHub Tools", "enabled": false, "version": "2.1.0", "source": "clawhub" }
+    ]
+  }
+}

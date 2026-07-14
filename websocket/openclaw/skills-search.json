@@ -1,0 +1,11 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "results": [
+      { "score": 0.95, "slug": "web-search", "displayName": "Web Search", "summary": "Search the web", "version": "1.2.0", "updatedAt": ${datetime.now.millis} },
+      { "score": 0.82, "slug": "github-tools", "displayName": "GitHub Tools", "summary": "Interact with GitHub repositories", "version": "2.1.0", "updatedAt": ${datetime.now.millis} }
+    ]
+  }
+}
