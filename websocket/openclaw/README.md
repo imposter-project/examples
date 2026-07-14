@@ -30,6 +30,8 @@ imposter up
 
 ## Try it
 
+### Using websocat
+
 Using [websocat](https://github.com/vi/websocat):
 
 ```bash
@@ -71,3 +73,24 @@ and send a chat message:
 ```
 
 to receive an acknowledgement followed by streamed tool and chat events. Leave the connection open to observe the periodic `tick` events.
+
+### Using a real OpenClaw client
+
+We can test this interactively using a real OpenCalw client, like [lucinate](https://github.com/lucinate-ai/lucinate).
+
+```sh
+brew install lucinate-ai/tap/lucinate
+```
+
+Start the client:
+
+```sh
+lucinate
+```
+
+Add a connection using the following settings:
+
+- Type: OpenClaw
+- URL: http://localhost:8080
+
+Once you're connected, you can view the agent list, and start chatting!
