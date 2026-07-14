@@ -21,6 +21,13 @@ The resources use a wildcard path (`path: /*`), so the mock accepts a WebSocket 
 imposter ./websocket/openclaw
 ```
 
+> [!TIP]
+> Imposter not installed?
+> Install with Homebrew:
+> ```sh
+> brew install imposter-project/imposter/imposter
+> ```
+
 ## Try it
 
 Using [websocat](https://github.com/vi/websocat):
