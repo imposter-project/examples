@@ -1,0 +1,21 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "artifacts": [
+      {
+        "id": "artifact-1",
+        "type": "code",
+        "title": "hello.py",
+        "mimeType": "text/x-python",
+        "sizeBytes": 40,
+        "sessionKey": "main",
+        "runId": "run-1",
+        "messageSeq": 2,
+        "source": "model_generation",
+        "download": { "mode": "bytes" }
+      }
+    ]
+  }
+}

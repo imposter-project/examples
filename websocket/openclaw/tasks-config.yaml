@@ -1,0 +1,88 @@
+# OpenClaw Gateway WebSocket mock - tasks and artifacts.
+# One completed task and one code artifact, kept consistent across methods.
+plugin: websocket
+
+resources:
+  # tasks.list: the task ledger.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: tasks.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: tasks-list.json
+      template: true
+
+  # tasks.get: one task by id.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: tasks.get
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: tasks-get.json
+      template: true
+
+  # tasks.cancel: cancel a task, acknowledged with the result.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: tasks.cancel
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"found":true,"cancelled":true,"task":{"id":"task-1","status":"cancelled"}}}'
+      template: true
+
+  # artifacts.list: artifacts produced in the session.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: artifacts.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: artifacts-list.json
+      template: true
+
+  # artifacts.get: one artifact's metadata.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: artifacts.get
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: artifacts-get.json
+      template: true
+
+  # artifacts.download: base64 bytes for a downloadable artifact.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: artifacts.download
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"artifact":{"id":"artifact-1","type":"code","title":"hello.py","mimeType":"text/x-python","sizeBytes":40,"download":{"mode":"bytes"}},"encoding":"base64","data":"cHJpbnQoImhlbGxvIGZyb20gdGhlIG1vY2sgbWFpbiBhZ2VudCIpCg=="}}'
+      template: true

@@ -1,0 +1,20 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "key": "main",
+    "sessionId": "session-main",
+    "agentId": "main",
+    "derivedTitle": "Main conversation",
+    "label": null,
+    "lastMessagePreview": "Here's the first part of the reply, and here is the rest.",
+    "updatedAt": ${datetime.now.millis},
+    "createdAt": ${datetime.now.millis},
+    "model": "claude-opus-4-8",
+    "thinkingLevel": "on",
+    "archived": false,
+    "pinned": false,
+    "unread": false
+  }
+}

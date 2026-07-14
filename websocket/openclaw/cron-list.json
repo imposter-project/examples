@@ -1,0 +1,26 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "jobs": [
+      {
+        "id": "cron-daily-digest",
+        "name": "Daily digest",
+        "description": "Summarise the day's activity",
+        "enabled": true,
+        "createdAtMs": ${datetime.now.millis},
+        "updatedAtMs": ${datetime.now.millis},
+        "schedule": { "kind": "cron", "expr": "0 9 * * *", "tz": "UTC" },
+        "sessionTarget": "isolated",
+        "wakeMode": "next-heartbeat",
+        "payload": { "kind": "agentTurn", "message": "Summarise today's activity and send me the digest.", "model": "claude-opus-4-8" },
+        "state": { "nextRunAtMs": ${datetime.now.millis}, "lastRunAtMs": ${datetime.now.millis}, "lastRunStatus": "ok" }
+      }
+    ],
+    "total": 1,
+    "offset": 0,
+    "limit": 50,
+    "hasMore": false
+  }
+}

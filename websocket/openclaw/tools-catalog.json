@@ -1,0 +1,25 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "agentId": "main",
+    "profiles": [
+      { "id": "minimal", "label": "Minimal" },
+      { "id": "coding", "label": "Coding" },
+      { "id": "messaging", "label": "Messaging" },
+      { "id": "full", "label": "Full" }
+    ],
+    "groups": [
+      {
+        "id": "core",
+        "label": "Core Tools",
+        "tools": [
+          { "id": "message", "label": "Send message", "description": "Send a message to a channel", "source": "core", "riskLevel": "low", "tags": ["messaging"] },
+          { "id": "read_file", "label": "Read file", "description": "Read a file from the workspace", "source": "core", "riskLevel": "low", "tags": ["files"] },
+          { "id": "exec", "label": "Execute command", "description": "Run a shell command", "source": "core", "riskLevel": "high", "tags": ["system"] }
+        ]
+      }
+    ]
+  }
+}

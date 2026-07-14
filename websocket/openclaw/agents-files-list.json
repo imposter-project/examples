@@ -1,0 +1,12 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "agentId": "main",
+    "workspace": "/home/mock/.openclaw/agents/main",
+    "files": [
+      { "name": "AGENT.md", "path": "/home/mock/.openclaw/agents/main/AGENT.md", "missing": false, "size": 128, "updatedAtMs": ${datetime.now.millis} }
+    ]
+  }
+}

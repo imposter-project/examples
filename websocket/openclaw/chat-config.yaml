@@ -1,0 +1,111 @@
+# OpenClaw Gateway WebSocket mock - chat domain.
+# Transcript reads plus the streamed chat.send flow.
+plugin: websocket
+
+resources:
+  # chat.history: prior messages for the session, so the chat screen renders a
+  # short seed conversation. Return {"messages":[]} for an empty history.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: chat.history
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: chat-history.json
+      template: true
+
+  # chat.message.get: fetch a single message's full content.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: chat.message.get
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: chat-message-get.json
+      template: true
+
+  # chat.toolTitles: batch tool-title rendering. This mock does not generate
+  # titles, so it reports them disabled (a valid, canonical response).
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: chat.toolTitles
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"titles":{},"disabled":true}}'
+      template: true
+
+  # chat.send: acknowledge with runId/status, then stream a tool agent event and
+  # chat delta/final events. runId is the request id; the session key is echoed
+  # from the request so the client routes the events to the active run.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: chat.send
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+      sessionKey:
+        requestBody:
+          jsonPath: $.params.sessionKey
+    responses:
+      - content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"runId":"${stores.request.reqId}","status":"started"}}'
+        template: true
+      - file: agent-tool-start.json
+        delay:
+          exact: 300
+        template: true
+      - file: agent-tool-result.json
+        delay:
+          exact: 300
+        template: true
+      - file: chat-event-delta.json
+        delay:
+          min: 200
+          max: 600
+        template: true
+      - file: chat-event-final.json
+        delay:
+          exact: 400
+        template: true
+
+  # chat.abort / chat.inject: void RPCs, acknowledged with ok:true.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: chat.abort
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: chat.inject
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true

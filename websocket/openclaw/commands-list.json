@@ -1,0 +1,34 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "commands": [
+      { "name": "help", "description": "Show available commands", "source": "native", "scope": "both", "acceptsArgs": false, "category": "status" },
+      { "name": "new", "description": "Start a new session", "source": "native", "scope": "both", "acceptsArgs": false, "category": "session" },
+      {
+        "name": "model",
+        "description": "Switch the session model",
+        "source": "native",
+        "scope": "both",
+        "acceptsArgs": true,
+        "category": "options",
+        "args": [
+          {
+            "name": "model",
+            "description": "Model id",
+            "type": "string",
+            "required": true,
+            "choices": [
+              { "value": "claude-opus-4-8", "label": "Claude Opus 4.8" },
+              { "value": "claude-sonnet-5", "label": "Claude Sonnet 5" },
+              { "value": "claude-haiku-4-5", "label": "Claude Haiku 4.5" }
+            ]
+          }
+        ]
+      },
+      { "name": "compact", "description": "Compact the current transcript", "source": "native", "scope": "both", "acceptsArgs": false, "category": "session" },
+      { "name": "tools", "description": "List available tools", "source": "native", "scope": "both", "acceptsArgs": false, "category": "tools" }
+    ]
+  }
+}

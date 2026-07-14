@@ -1,0 +1,15 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "ok": true,
+    "message": {
+      "id": "msg-2",
+      "role": "assistant",
+      "content": [
+        { "type": "text", "text": "Hi! I'm the mock main agent. Ask me anything." }
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "runs": [
+      {
+        "ts": ${datetime.now.millis},
+        "jobId": "cron-daily-digest",
+        "action": "finished",
+        "status": "ok",
+        "summary": "Digest sent",
+        "durationMs": 4200,
+        "model": "claude-opus-4-8",
+        "provider": "anthropic",
+        "usage": { "input_tokens": 1500, "output_tokens": 800, "total_tokens": 2300 },
+        "delivered": true,
+        "deliveryStatus": "delivered",
+        "jobName": "Daily digest"
+      }
+    ]
+  }
+}

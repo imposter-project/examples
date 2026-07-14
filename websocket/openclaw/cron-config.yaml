@@ -1,0 +1,116 @@
+# OpenClaw Gateway WebSocket mock - cron domain.
+# One scheduled job, 'cron-daily-digest', kept consistent across list/get/runs.
+plugin: websocket
+
+resources:
+  # cron.list: one scheduled job.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: cron.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: cron-list.json
+      template: true
+
+  # cron.get: the same job by id.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: cron.get
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: cron-get.json
+      template: true
+
+  # cron.runs: run history for the job.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: cron.runs
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: cron-runs.json
+      template: true
+
+  # cron.status: scheduler status summary.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: cron.status
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"running":true,"jobs":1,"nextRunAtMs":${datetime.now.millis}}}'
+      template: true
+
+  # cron.add: create a job (returns the created job).
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: cron.add
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"created":true,"job":{"id":"cron-new","name":"New job","enabled":true}}}'
+      template: true
+
+  # cron.update: update a job (returns the updated job).
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: cron.update
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"id":"cron-daily-digest","name":"Daily digest","enabled":false}}'
+      template: true
+
+  # cron.run: enqueue an immediate run.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: cron.run
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"runId":"run-cron-1","enqueued":true}}'
+      template: true
+
+  # cron.remove: delete a job, acknowledged with ok:true.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: cron.remove
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true

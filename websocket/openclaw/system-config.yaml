@@ -1,0 +1,117 @@
+# OpenClaw Gateway WebSocket mock - system, audit, config and pairing.
+# On a simple single-node local gateway the pairing/node/environment/approval
+# lists are legitimately empty.
+plugin: websocket
+
+resources:
+  # system-info: gateway host identity and resource snapshot.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: system-info
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: system-info.json
+      template: true
+
+  # audit.activity.list: metadata-only activity ledger (empty in this mock).
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: audit.activity.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: audit-activity.json
+      template: true
+
+  # config.get: the on-disk config snapshot with its hash.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: config.get
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: config-get.json
+      template: true
+
+  # device.pair.list: no pending or approved devices.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: device.pair.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"pending":[],"approved":[]}}'
+      template: true
+
+  # node.list: no companion nodes.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: node.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"nodes":[]}}'
+      template: true
+
+  # environments.list: no worker environments.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: environments.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"environments":[]}}'
+      template: true
+
+  # exec.approval.list: no pending exec approvals.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: exec.approval.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"approvals":[]}}'
+      template: true
+
+  # approval.get: no such approval (nothing pending).
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: approval.get
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"approval":null}}'
+      template: true

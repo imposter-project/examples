@@ -6,6 +6,6 @@
     "sessionKey": "${stores.request.sessionKey}",
     "seq": 1,
     "state": "delta",
-    "message": "Here's the first part of the reply, "
+    "deltaText": "Here's the first part of the reply, "
   }
 }

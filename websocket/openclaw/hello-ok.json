@@ -10,7 +10,28 @@
       "connId": "${random.uuid()}"
     },
     "features": {
-      "methods": ["connect", "chat.send", "chat.history", "chat.abort"],
+      "methods": [
+        "connect", "system-info", "agent.identity.get",
+        "agents.list", "agents.create", "agents.update", "agents.delete",
+        "agents.files.list", "agents.files.get", "agents.files.set",
+        "agents.workspace.list", "agents.workspace.get", "agent.wait",
+        "sessions.list", "sessions.get", "sessions.describe", "sessions.preview",
+        "sessions.resolve", "sessions.usage", "sessions.create", "sessions.patch",
+        "sessions.reset", "sessions.delete", "sessions.abort", "sessions.compact",
+        "sessions.send", "sessions.steer", "sessions.subscribe", "sessions.unsubscribe",
+        "sessions.messages.subscribe", "sessions.messages.unsubscribe",
+        "sessions.groups.list", "sessions.groups.put", "sessions.groups.rename", "sessions.groups.delete",
+        "chat.history", "chat.message.get", "chat.send", "chat.abort", "chat.inject", "chat.toolTitles",
+        "models.list", "models.probe",
+        "cron.list", "cron.get", "cron.status", "cron.runs", "cron.add", "cron.update", "cron.run", "cron.remove",
+        "commands.list", "tools.catalog", "tools.effective", "tools.invoke",
+        "skills.status", "skills.search", "skills.detail",
+        "channels.status", "channels.logout",
+        "tasks.list", "tasks.get", "tasks.cancel",
+        "artifacts.list", "artifacts.get", "artifacts.download",
+        "audit.activity.list", "config.get",
+        "device.pair.list", "node.list", "environments.list", "approval.get", "exec.approval.list"
+      ],
       "events": ["connect.challenge", "tick", "chat", "agent"]
     },
     "snapshot": {

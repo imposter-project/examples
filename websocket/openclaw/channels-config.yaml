@@ -1,0 +1,32 @@
+# OpenClaw Gateway WebSocket mock - channels domain.
+# A single connected telegram account.
+plugin: websocket
+
+resources:
+  # channels.status: channel and account status snapshot.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: channels.status
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: channels-status.json
+      template: true
+
+  # channels.logout: log a channel account out, acknowledged with ok:true.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: channels.logout
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true

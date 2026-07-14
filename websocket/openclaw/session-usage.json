@@ -1,0 +1,24 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "sessions": [
+      {
+        "key": "main",
+        "agentId": "main",
+        "model": "claude-opus-4-8",
+        "input_tokens": 1500,
+        "output_tokens": 800,
+        "total_tokens": 2300,
+        "costUsd": 0.0123
+      }
+    ],
+    "totals": {
+      "input_tokens": 1500,
+      "output_tokens": 800,
+      "total_tokens": 2300,
+      "costUsd": 0.0123
+    }
+  }
+}

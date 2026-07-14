@@ -1,0 +1,17 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "agentId": "main",
+    "file": {
+      "path": "/home/mock/workspace/README.md",
+      "name": "README.md",
+      "size": 64,
+      "updatedAtMs": ${datetime.now.millis},
+      "mimeType": "text/markdown",
+      "encoding": "utf8",
+      "content": "# Mock workspace\nExample file."
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "agentId": "main",
+    "profile": "full",
+    "groups": [
+      {
+        "id": "core",
+        "label": "Core Tools",
+        "source": "core",
+        "tools": [
+          { "id": "message", "label": "Send message", "description": "Send a message to a channel", "rawDescription": "Send a message to a channel", "source": "core", "risk": "low", "tags": ["messaging"] },
+          { "id": "read_file", "label": "Read file", "description": "Read a file from the workspace", "rawDescription": "Read a file from the workspace", "source": "core", "risk": "low", "tags": ["files"] },
+          { "id": "exec", "label": "Execute command", "description": "Run a shell command", "rawDescription": "Run a shell command", "source": "core", "risk": "high", "tags": ["system"] }
+        ]
+      }
+    ],
+    "notices": [
+      { "severity": "info", "message": "High-risk tools require approval before use." }
+    ]
+  }
+}

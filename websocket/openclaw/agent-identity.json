@@ -1,0 +1,12 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "agentId": "main",
+    "name": "Main",
+    "emoji": "🤖",
+    "avatarSource": "emoji",
+    "avatarStatus": "emoji"
+  }
+}

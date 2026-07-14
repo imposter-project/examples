@@ -1,0 +1,27 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "ts": ${datetime.now.millis},
+    "channelOrder": ["telegram"],
+    "channelLabels": { "telegram": "Telegram" },
+    "channels": {},
+    "channelAccounts": {
+      "telegram": [
+        {
+          "accountId": "telegram-main",
+          "name": "Main bot",
+          "enabled": true,
+          "configured": true,
+          "linked": true,
+          "running": true,
+          "connected": true,
+          "lastConnectedAt": ${datetime.now.millis},
+          "activeRuns": 0
+        }
+      ]
+    },
+    "channelDefaultAccountId": { "telegram": "telegram-main" }
+  }
+}

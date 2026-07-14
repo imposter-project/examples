@@ -1,0 +1,13 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "config": {
+      "gateway": { "port": 8080 },
+      "agents": { "main": { "model": "claude-opus-4-8" } }
+    },
+    "hash": "sha256:mock",
+    "configRevisionHash": "rev-mock-1"
+  }
+}

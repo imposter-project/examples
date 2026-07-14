@@ -1,0 +1,26 @@
+{
+  "type": "res",
+  "id": "${stores.request.reqId}",
+  "ok": true,
+  "payload": {
+    "skill": {
+      "slug": "web-search",
+      "displayName": "Web Search",
+      "summary": "Search the web",
+      "tags": { "category": "information-retrieval" },
+      "isOfficial": true,
+      "createdAt": ${datetime.now.millis},
+      "updatedAt": ${datetime.now.millis}
+    },
+    "latestVersion": {
+      "version": "1.2.0",
+      "createdAt": ${datetime.now.millis},
+      "changelog": "Add search filters"
+    },
+    "owner": {
+      "handle": "openclaw",
+      "displayName": "OpenClaw",
+      "official": true
+    }
+  }
+}

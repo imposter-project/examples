@@ -1,0 +1,307 @@
+# OpenClaw Gateway WebSocket mock - sessions domain.
+# Browse and manage the single 'main' session. Read methods return a
+# self-consistent snapshot; write/void methods are acknowledged with ok:true.
+plugin: websocket
+
+resources:
+  # sessions.list: one 'main' session for the main agent.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"sessions":[{"key":"main","derivedTitle":"Main conversation","lastMessagePreview":"","updatedAt":${datetime.now.millis},"model":"claude-opus-4-8"}]}}'
+      template: true
+
+  # sessions.get: the full stored row for a session.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.get
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: session-get.json
+      template: true
+
+  # sessions.describe: gateway session row.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.describe
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: session-describe.json
+      template: true
+
+  # sessions.preview: a bounded transcript preview for the session.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.preview
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: session-preview.json
+      template: true
+
+  # sessions.resolve: resolve a session target to a canonical reference.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.resolve
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"key":"main","sessionId":"session-main","agentId":"main"}}'
+      template: true
+
+  # sessions.usage: per-session token/cost usage summary.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.usage
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: session-usage.json
+      template: true
+
+  # sessions.create: create or resume a session. There is a single session, so
+  # the created key is always 'main' - the client opens the chat on it.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.create
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"key":"main"}}'
+      template: true
+
+  # sessions.patch: set the model (or other settings) for a session. A void RPC
+  # - the client only needs an ok:true acknowledgement.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.patch
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true
+
+  # sessions.groups.list: custom session groups.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.groups.list
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      file: session-groups.json
+      template: true
+
+  # Void/write RPCs: reset, delete, abort, compact, send, steer, the
+  # subscribe/unsubscribe pairs and the group mutations. Each is acknowledged
+  # with an ok:true response frame, echoing the request id.
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.reset
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.delete
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.abort
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.compact
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true
+
+  # sessions.send: like chat.send but addressed by session key; acknowledged
+  # with a runId/status (streamed events are shown under chat.send).
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.send
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true,"payload":{"runId":"${stores.request.reqId}","status":"started"}}'
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.steer
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.subscribe
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.unsubscribe
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.messages.subscribe
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.messages.unsubscribe
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.groups.put
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.groups.rename
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true
+
+  - path: /*
+    requestBody:
+      allOf:
+        - jsonPath: $.type
+          value: req
+        - jsonPath: $.method
+          value: sessions.groups.delete
+    capture:
+      reqId: { requestBody: { jsonPath: $.id } }
+    response:
+      content: '{"type":"res","id":"${stores.request.reqId}","ok":true}'
+      template: true
