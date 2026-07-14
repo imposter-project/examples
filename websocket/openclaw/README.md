@@ -18,7 +18,7 @@ The resources use a wildcard path (`path: /*`), so the mock accepts a WebSocket 
 ## Run
 
 ```bash
-imposter ./websocket/openclaw
+imposter up
 ```
 
 > [!TIP]
