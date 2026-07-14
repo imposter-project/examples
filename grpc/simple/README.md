@@ -43,6 +43,13 @@ resources:
 
 ## Usage
 
+> [!TIP]
+> Imposter not installed?
+> Install with Homebrew:
+> ```sh
+> brew install imposter-project/imposter/imposter
+> ```
+
 1. Start the mock server:
 
    ```bash
