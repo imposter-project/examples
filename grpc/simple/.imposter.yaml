@@ -1,0 +1,4 @@
+engine: native
+
+plugins:
+  - grpc
