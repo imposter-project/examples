@@ -13,10 +13,10 @@ jobs:
       checks: write
     steps:
       - name: Checkout examples
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Checkout imposter-jvm-engine
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: 'imposter-project/imposter-jvm-engine'
           path: 'imposter-jvm-engine'
