@@ -27,13 +27,21 @@ resources:
 
   # --- Chat completions --------------------------------------------------
 
+  # The three chat resources below share one path, so their body conditions
+  # are kept mutually exclusive — exactly one matches any request. Otherwise
+  # Imposter reports "more than one resource matched" and picks one at random.
+  # Note: `value: "true"` is quoted so it stays the *string* true, not a YAML
+  # boolean, which the body matcher would never equal.
+
   # Streaming: the client asked for stream: true. Reply with Server-Sent
   # Events, one chat.completion.chunk per `data:` line, ending with [DONE].
+  # Streaming wins over tool calling when both would apply.
   - method: POST
     path: /v1/chat/completions
     requestBody:
       jsonPath: $.stream
-      value: true
+      operator: EqualTo
+      value: "true"
     capture:
       model:
         jsonPath: $.model
@@ -44,13 +52,17 @@ resources:
       headers:
         Content-Type: text/event-stream
 
-  # Tool calling: the latest message mentions the weather, so the assistant
-  # responds with a call to the get_weather function instead of prose.
+  # Tool calling: the latest message mentions the weather (and the client is
+  # not streaming), so the assistant calls the get_weather function.
   - method: POST
     path: /v1/chat/completions
     requestBody:
-      operator: Contains
-      value: weather
+      allOf:
+        - operator: Contains
+          value: weather
+        - jsonPath: $.stream
+          operator: NotEqualTo
+          value: "true"
     capture:
       model:
         jsonPath: $.model
@@ -59,9 +71,16 @@ resources:
       file: responses/chat-completion-tool-call.json
       template: true
 
-  # Plain chat completion (the default).
+  # Plain chat completion: anything that is neither streamed nor about weather.
   - method: POST
     path: /v1/chat/completions
+    requestBody:
+      allOf:
+        - operator: NotContains
+          value: weather
+        - jsonPath: $.stream
+          operator: NotEqualTo
+          value: "true"
     capture:
       model:
         jsonPath: $.model
