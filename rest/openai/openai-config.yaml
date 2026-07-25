@@ -1,0 +1,93 @@
+plugin: rest
+
+# An OpenAI-compatible mock: the endpoints an "OpenAI compatible" AI harness
+# expects, served from externalised response files. Point your client's base URL
+# at http://localhost:8080/v1 and drop in any API key.
+#
+# Chat completions route to a different response file depending on the request
+# body, so one endpoint covers plain chat, streaming and tool calling:
+#   * stream: true          -> Server-Sent Events (text/event-stream)
+#   * ...mentions "weather" -> an assistant tool call (finish_reason: tool_calls)
+#   * otherwise             -> a plain assistant message
+#
+# The requested model is echoed back into each response via a captured store.
+
+resources:
+  # --- List models -------------------------------------------------------
+  - method: GET
+    path: /v1/models
+    response:
+      file: responses/models.json
+
+  - method: GET
+    path: /v1/models/{model}
+    response:
+      file: responses/model.json
+      template: true
+
+  # --- Chat completions --------------------------------------------------
+
+  # Streaming: the client asked for stream: true. Reply with Server-Sent
+  # Events, one chat.completion.chunk per `data:` line, ending with [DONE].
+  - method: POST
+    path: /v1/chat/completions
+    requestBody:
+      jsonPath: $.stream
+      value: true
+    capture:
+      model:
+        jsonPath: $.model
+        store: request
+    response:
+      file: responses/chat-completion-stream.txt
+      template: true
+      headers:
+        Content-Type: text/event-stream
+
+  # Tool calling: the latest message mentions the weather, so the assistant
+  # responds with a call to the get_weather function instead of prose.
+  - method: POST
+    path: /v1/chat/completions
+    requestBody:
+      operator: Contains
+      value: weather
+    capture:
+      model:
+        jsonPath: $.model
+        store: request
+    response:
+      file: responses/chat-completion-tool-call.json
+      template: true
+
+  # Plain chat completion (the default).
+  - method: POST
+    path: /v1/chat/completions
+    capture:
+      model:
+        jsonPath: $.model
+        store: request
+    response:
+      file: responses/chat-completion.json
+      template: true
+
+  # --- Legacy text completions -------------------------------------------
+  - method: POST
+    path: /v1/completions
+    capture:
+      model:
+        jsonPath: $.model
+        store: request
+    response:
+      file: responses/completion.json
+      template: true
+
+  # --- Embeddings --------------------------------------------------------
+  - method: POST
+    path: /v1/embeddings
+    capture:
+      model:
+        jsonPath: $.model
+        store: request
+    response:
+      file: responses/embeddings.json
+      template: true
